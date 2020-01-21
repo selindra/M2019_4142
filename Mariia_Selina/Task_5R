@@ -1,0 +1,23 @@
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+
+answer <- function(df, row, column, action) {
+  newdata <- df %>%
+    subset(select = column) %>%
+    slice(row) 
+  
+  numdata <- newdata %>%
+    summarise_if(is.numeric, action)
+  
+  nonumdata <- newdata %>%
+    select_if(negate(is.numeric)) %>%
+    gather() %>%
+    tally()
+  
+  a<-return(list(newdata, numdata, nonumdata))
+  print(a)
+}
+answer(airquality, 60:75, c(2: 5), sd)
+answer(airquality, 1:25, c(3:5), median)
+answer(mtcars, 20:35, c(3: 5), mean)
